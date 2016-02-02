@@ -17,15 +17,16 @@
   },
   "homepage": "https://github.com/naujs/psql-connector#readme",
   "dependencies": {
-    "@naujs/sql-generator": "^0.2.7",
-    "@naujs/util": "0.0.6",
     "lodash": "^4.0.0",
     "pg": "^4.4.3"
   },
   "optionalDependencies": {
-    "pg-native": "^1.10.0"
+    "pg-native": "^1.10.0",
+    "@naujs/sql-generator": "^0.2.7",
+    "@naujs/util": "0.0.6",
+    "@naujs/gulp-tasks": "latest"
   },
   "devDependencies": {
-    "@naujs/gulp-tasks": "^0.1.1"
+
   }
 }
