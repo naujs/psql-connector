@@ -35,7 +35,7 @@ var testData = [
 
 describe('PsqlConnector', () => {
   var instance;
-  beforeEach((done) => {
+  beforeEach(() => {
     instance = PsqlConnector.getInstance({force: true});
     connection = instance.getConnection();
 
@@ -48,21 +48,21 @@ describe('PsqlConnector', () => {
       );
     `;
 
-    connection.sendQuery(query).then(done, fail);
+    return connection.sendQuery(query);
   });
 
   describe('#create', () => {
-    it('should create a new record', (done) => {
-      instance.create(TEST_TABLE, testData[0]).then((result) => {
+    it('should create a new record', () => {
+      return instance.create(TEST_TABLE, testData[0]).then((result) => {
         expect(_.keys(result)).toEqual(EXPECTED_COLUMNS);
         expect(result.name).toEqual('Name 0');
         expect(result.address).toEqual('Address 0');
         expect(typeof result.id).toEqual('number');
-      }).then(done, fail);
+      });
     });
 
-    it('should create multiple records', (done) => {
-      instance.create(TEST_TABLE, testData).then((results) => {
+    it('should create multiple records', () => {
+      return instance.create(TEST_TABLE, testData).then((results) => {
         expect(results.length).toEqual(testData.length);
         _.each(_.range(1), (index) => {
           var result = results[index];
@@ -72,17 +72,17 @@ describe('PsqlConnector', () => {
           expect(result.address).toEqual(expectedResult.address);
           expect(typeof result.id).toEqual('number');
         });
-      }).then(done, fail);
+      });
     });
   });
 
   describe('#find', () => {
-    beforeEach((done) => {
-      instance.create(TEST_TABLE, testData).then(done, fail);
+    beforeEach(() => {
+      return instance.create(TEST_TABLE, testData);
     });
 
-    it('should find record', (done) => {
-      instance.find(TEST_TABLE, {
+    it('should find record', () => {
+      return instance.find(TEST_TABLE, {
         where: {
           id: 1
         }
@@ -91,35 +91,35 @@ describe('PsqlConnector', () => {
         expect(result).toBeTruthy();
         expect(result.name).toEqual(expectedResult.name);
         expect(result.address).toEqual(expectedResult.address);
-      }).then(done, fail);
+      });
     });
 
-    it('should limit the result to one', (done) => {
-      instance.find(TEST_TABLE).then((result) => {
+    it('should limit the result to one', () => {
+      return instance.find(TEST_TABLE).then((result) => {
         expectedResult = testData[0];
         expect(result).toBeTruthy();
         expect(result.name).toEqual(expectedResult.name);
         expect(result.address).toEqual(expectedResult.address);
-      }).then(done, fail);
+      });
     });
   });
 
   describe('#findAll', () => {
-    beforeEach((done) => {
-      instance.create(TEST_TABLE, testData).then(done, fail);
+    beforeEach(() => {
+      return instance.create(TEST_TABLE, testData);
     });
 
-    it('should find all records', (done) => {
-      instance.findAll(TEST_TABLE).then((results) => {
+    it('should find all records', () => {
+      return instance.findAll(TEST_TABLE).then((results) => {
         expect(results.length).toEqual(testData.length);
         _.each(testData, (data, index) => {
           expect(results[index].name).toEqual(data.name);
         });
-      }).then(done, fail);
+      });
     });
 
     it('should find all records based on criteria', (done) => {
-      instance.findAll(TEST_TABLE, {
+      return instance.findAll(TEST_TABLE, {
         where: {
           code: 123
         }
@@ -127,17 +127,17 @@ describe('PsqlConnector', () => {
         expect(results.length).toEqual(_.filter(testData, (data) => {
           return data.code === 123;
         }).length);
-      }).then(done, fail);
+      });
     });
   });
 
   describe('#update', () => {
-    beforeEach((done) => {
-      instance.create(TEST_TABLE, testData).then(done, fail);
+    beforeEach(() => {
+      return instance.create(TEST_TABLE, testData);
     });
 
-    it('should update record', (done) => {
-      instance.update(TEST_TABLE, {
+    it('should update record', () => {
+      return instance.update(TEST_TABLE, {
         where: {
           id: 1
         }
@@ -154,17 +154,17 @@ describe('PsqlConnector', () => {
         }).then(function(result) {
           expect(result.name).toEqual('Tan Nguyen');
         });
-      }).then(done, fail);
+      });
     });
   });
 
   describe('#delete', () => {
-    beforeEach((done) => {
-      instance.create(TEST_TABLE, testData).then(done, fail);
+    beforeEach(() => {
+      return instance.create(TEST_TABLE, testData);
     });
 
-    it('should delete one record', (done) => {
-      instance.delete(TEST_TABLE, {
+    it('should delete one record', () => {
+      return instance.delete(TEST_TABLE, {
         where: {
           id: 1
         }
@@ -176,50 +176,50 @@ describe('PsqlConnector', () => {
         return instance.findAll(TEST_TABLE).then(function(results) {
           expect(results.length).toEqual(2);
         });
-      }).then(done, fail);
+      });
     });
 
-    it('should delete all records', (done) => {
-      instance.delete(TEST_TABLE).then((results) => {
+    it('should delete all records', () => {
+      return instance.delete(TEST_TABLE).then((results) => {
         expect(results.length).toEqual(testData.length);
 
         return instance.findAll(TEST_TABLE).then(function(results) {
           expect(results.length).toEqual(0);
         });
-      }).then(done, fail);
+      });
     });
 
   });
 
   describe('#count', () => {
-    beforeEach((done) => {
-      instance.create(TEST_TABLE, testData).then(done, fail);
+    beforeEach(() => {
+      return instance.create(TEST_TABLE, testData);
     });
 
-    it('should count all records', (done) => {
-      instance.count(TEST_TABLE).then((count) => {
+    it('should count all records', () => {
+      return instance.count(TEST_TABLE).then((count) => {
         expect(count).toEqual(3);
-      }).then(done, fail);
+      });
     });
 
-    it('should count records using criteria', (done) => {
-      instance.count(TEST_TABLE, {
+    it('should count records using criteria', () => {
+      return instance.count(TEST_TABLE, {
         where: {
           code: 123
         }
       }).then((count) => {
         expect(count).toEqual(2);
-      }).then(done, fail);
+      });
     });
 
   });
 
-  afterEach((done) => {
+  afterEach(() => {
     connection = instance.getConnection();
     var query = `
       DROP TABLE ${TEST_TABLE};
     `;
 
-    connection.sendQuery(query).then(done, fail);
+    return connection.sendQuery(query);
   });
 });
