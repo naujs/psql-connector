@@ -76,41 +76,13 @@ describe('PsqlConnector', () => {
     });
   });
 
-  describe('#find', () => {
-    beforeEach(() => {
-      return instance.create(TEST_TABLE, testData);
-    });
-
-    it('should find record', () => {
-      return instance.find(TEST_TABLE, {
-        where: {
-          id: 1
-        }
-      }).then((result) => {
-        expectedResult = testData[0];
-        expect(result).toBeTruthy();
-        expect(result.name).toEqual(expectedResult.name);
-        expect(result.address).toEqual(expectedResult.address);
-      });
-    });
-
-    it('should limit the result to one', () => {
-      return instance.find(TEST_TABLE).then((result) => {
-        expectedResult = testData[0];
-        expect(result).toBeTruthy();
-        expect(result.name).toEqual(expectedResult.name);
-        expect(result.address).toEqual(expectedResult.address);
-      });
-    });
-  });
-
-  describe('#findAll', () => {
+  describe('#read', () => {
     beforeEach(() => {
       return instance.create(TEST_TABLE, testData);
     });
 
     it('should find all records', () => {
-      return instance.findAll(TEST_TABLE).then((results) => {
+      return instance.read(TEST_TABLE).then((results) => {
         expect(results.length).toEqual(testData.length);
         _.each(testData, (data, index) => {
           expect(results[index].name).toEqual(data.name);
@@ -119,7 +91,7 @@ describe('PsqlConnector', () => {
     });
 
     it('should find all records based on criteria', (done) => {
-      return instance.findAll(TEST_TABLE, {
+      return instance.read(TEST_TABLE, {
         where: {
           code: 123
         }
@@ -147,12 +119,12 @@ describe('PsqlConnector', () => {
         expect(result).toBeTruthy();
         expect(result.name).toEqual('Tan Nguyen');
 
-        return instance.find(TEST_TABLE, {
+        return instance.read(TEST_TABLE, {
           where: {
             id: 1
           }
         }).then(function(result) {
-          expect(result.name).toEqual('Tan Nguyen');
+          expect(result[0].name).toEqual('Tan Nguyen');
         });
       });
     });
@@ -173,7 +145,7 @@ describe('PsqlConnector', () => {
         expect(result.id).toEqual(1);
         expect(result.name).toEqual('Name 0');
 
-        return instance.findAll(TEST_TABLE).then(function(results) {
+        return instance.read(TEST_TABLE).then(function(results) {
           expect(results.length).toEqual(2);
         });
       });
@@ -183,7 +155,7 @@ describe('PsqlConnector', () => {
       return instance.delete(TEST_TABLE).then((results) => {
         expect(results.length).toEqual(testData.length);
 
-        return instance.findAll(TEST_TABLE).then(function(results) {
+        return instance.read(TEST_TABLE).then(function(results) {
           expect(results.length).toEqual(0);
         });
       });

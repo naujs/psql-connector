@@ -52,33 +52,21 @@ var PsqlConnector = (function () {
       return this._connection;
     }
   }, {
-    key: 'find',
-    value: function find(tableName) {
-      var criteria = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-      var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-
-      criteria.limit = 1;
-      var select = this._generator.select(tableName, criteria);
-      return this.getConnection().sendQuery(select).then(function (rows) {
-        return rows[0] || null;
-      });
-    }
-  }, {
-    key: 'findAll',
-    value: function findAll(tableName) {
-      var criteria = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-      var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-
-      var select = this._generator.select(tableName, criteria);
-      return this.getConnection().sendQuery(select);
-    }
-  }, {
     key: 'create',
     value: function create(tableName, attributes) {
       var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
       var insert = this._generator.insert(tableName, attributes, options);
       return this.getConnection().sendQuery(insert).then(returnResult);
+    }
+  }, {
+    key: 'read',
+    value: function read(tableName) {
+      var criteria = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
+      var select = this._generator.select(tableName, criteria);
+      return this.getConnection().sendQuery(select);
     }
   }, {
     key: 'update',

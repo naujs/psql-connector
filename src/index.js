@@ -37,22 +37,14 @@ class PsqlConnector {
     return this._connection;
   }
 
-  find(tableName, criteria = {}, options = {}) {
-    criteria.limit = 1;
-    var select = this._generator.select(tableName, criteria);
-    return this.getConnection().sendQuery(select).then((rows) => {
-      return rows[0] || null;
-    });
-  }
-
-  findAll(tableName, criteria = {}, options = {}) {
-    var select = this._generator.select(tableName, criteria);
-    return this.getConnection().sendQuery(select);
-  }
-
   create(tableName, attributes, options = {}) {
     var insert = this._generator.insert(tableName, attributes, options);
     return this.getConnection().sendQuery(insert).then(returnResult);
+  }
+
+  read(tableName, criteria = {}, options = {}) {
+    var select = this._generator.select(tableName, criteria);
+    return this.getConnection().sendQuery(select);
   }
 
   update(tableName, criteria, attributes, options = {}) {
