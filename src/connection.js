@@ -67,6 +67,10 @@ class Connection {
   }
 
   sendQuery(query, params = []) {
+    if (params.length == 0) {
+      params = null;
+    }
+
     if (this._options.clientPooling) {
       return this._sendQueryToPoolingClient(query, params);
     }

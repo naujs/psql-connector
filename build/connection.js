@@ -94,6 +94,10 @@ var Connection = (function () {
     value: function sendQuery(query) {
       var params = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
 
+      if (params.length == 0) {
+        params = null;
+      }
+
       if (this._options.clientPooling) {
         return this._sendQueryToPoolingClient(query, params);
       }
