@@ -2,17 +2,8 @@
 
 /*eslint max-nested-callbacks:0*/
 var PsqlConnector = require('../../')
-  , util = require('@naujs/util')
   , _ = require('lodash')
   , DbCriteria = require('@naujs/db-criteria');
-
-var testOptions = {
-  host: util.getEnv('PSQL_CONNECTOR_TEST_HOST') || 'localhost',
-  port: util.getEnv('PSQL_CONNECTOR_TEST_PORT') || 5432,
-  user: util.getEnv('PSQL_CONNECTOR_TEST_USER') || 'tannguyen',
-  password: util.getEnv('PSQL_CONNECTOR_TEST_PASSWORD') || '',
-  db: util.getEnv('PSQL_CONNECTOR_TEST_DB') || 'tannguyen'
-};
 
 describe('PsqlConnector', () => {
   var instance, connection, criteria;
@@ -24,7 +15,7 @@ describe('PsqlConnector', () => {
   }
 
   beforeEach(() => {
-    instance = PsqlConnector.getInstance(_.extend({}, testOptions, {force: true}));
+    instance = PsqlConnector.getInstance(_.extend({}, getTestDbOptions(), {force: true}));
     connection = instance.getConnection();
     criteria = new DbCriteria(Store);
 
