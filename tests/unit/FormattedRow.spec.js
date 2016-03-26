@@ -1,4 +1,4 @@
-var FormattedRow = require('../build/FormattedRow');
+var FormattedRow = require('../../build/FormattedRow');
 
 describe('FormattedRow', () => {
   var formattedRow;

@@ -1,4 +1,4 @@
-var ResultSet = require('../build/ResultSet');
+var ResultSet = require('../../build/ResultSet');
 
 function createProduct(index) {
   return {

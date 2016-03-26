@@ -1,7 +1,7 @@
 'use strict';
 
 /*eslint max-nested-callbacks:0*/
-var PsqlConnector = require('../')
+var PsqlConnector = require('../../')
   , util = require('@naujs/util')
   , _ = require('lodash')
   , Registry = require('@naujs/registry')
