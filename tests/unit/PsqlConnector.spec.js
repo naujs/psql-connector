@@ -15,11 +15,11 @@ describe('PsqlConnector', () => {
   }
 
   beforeEach(() => {
-    instance = PsqlConnector.getInstance(_.extend({}, getTestDbOptions(), {force: true}));
+    instance = PsqlConnector.getInstance(_.extend({}, getPsqlTestDbOptions(), {force: true}));
     connection = instance.getConnection();
     criteria = new DbCriteria(Store);
 
-    return setupDatabase(connection);
+    return setupPsqlDatabase(connection);
   });
 
   describe('#create', () => {
@@ -538,6 +538,6 @@ describe('PsqlConnector', () => {
 
   afterEach(() => {
     connection = instance.getConnection();
-    return teardownDatabase(connection);
+    return teardownPsqlDatabase(connection);
   });
 });
