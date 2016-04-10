@@ -60,6 +60,7 @@ function addRelationToResult(result, formattedRelations, criteria, parentRelatio
     var newResult;
     switch (relationDef.type) {
       case 'belongsTo':
+      case 'hasOne':
         newResult = result.addSingleRelation(name, relation.data);
         break;
       default:
